@@ -1,0 +1,22 @@
+.wpEvent {
+    .containerEvent {
+        .listEvent {
+            .eventInfo {
+                .eventCode {
+                    padding: 10px 0;
+                }
+            }
+        }
+        .actionEvent {
+            float: right;
+            .btn {
+                margin: 10px 5px;
+            }
+            .btnTitle {
+                font-size: 10px;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+    }
+}

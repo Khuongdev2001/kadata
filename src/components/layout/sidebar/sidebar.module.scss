@@ -1,0 +1,29 @@
+.sidebar {
+    width: 250px;
+    background-color: var(--violet);
+    height: 100vh;
+    color: var(--light);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    .sidebarTop {
+        padding: 30px 15px 0 10px;
+    }
+    .sidebarMenu {
+        padding: 40px 0;
+        .menuItem {
+            .menuLink {
+                display: block;
+                padding: 15px 20px;
+                &.active {
+                    background-color: var(--light);
+                    color: var(--violet);
+                }
+                &:hover {
+                    background-color: var(--light);
+                    color: var(--violet);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,23 @@
+.wrapper {
+    .bgLogin {
+        width: 680px;
+    }
+    .outerWpForm {
+        flex: 1;
+    }
+    .wpForm {
+        width: 400px;
+        margin: 0 auto;
+        padding: 50px 0;
+        .form {
+            flex: 0 1 100%;
+            .title {
+                font-size: 30px;
+                padding: 0 0 10px 0;
+            }
+            .formGroup {
+                padding: 10px 0;
+            }
+        }
+    }
+}

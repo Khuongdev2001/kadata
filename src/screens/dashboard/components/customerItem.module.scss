@@ -1,0 +1,36 @@
+.wpCustomer {
+    flex: 2;
+    padding: 0 10px;
+    position: relative;
+    .title {
+        padding-bottom: 15px;
+        text-align: center;
+    }
+    .box {
+        width: 49%;
+    }
+    .listCustomers {
+        .customerItem {
+            cursor: pointer;
+            height: 50px;
+            margin: 5px 0;
+            padding: 0px 5px;
+            &:hover {
+                background: var(--violet);
+                border-radius: 5px;
+                color: var(--light);
+            }
+            .customerName {
+                font-weight: bold;
+            }
+        }
+    }
+    .customerCreate {
+        padding-top: 15px;
+    }
+    .btnRemove {
+        min-width: 30px;
+        width: 30px;
+        z-index: 10;
+    }
+}

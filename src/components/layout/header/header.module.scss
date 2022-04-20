@@ -1,0 +1,22 @@
+.header {
+    padding-bottom: 20px;
+    .headerRight {
+        .ml {
+            margin-left: 15px;
+        }
+        .boxAvatar {
+            display: inline-block;
+            position: relative;
+            .circular {
+                background-color: var(--green);
+                width: 10px;
+                height: 10px;
+                display: block;
+                border-radius: 50%;
+                position: absolute;
+                bottom: 5px;
+                right: 0;
+            }
+        }
+    }
+}

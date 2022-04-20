@@ -1,0 +1,20 @@
+.wagePage {
+    background-color: var(--light);
+    .wageTop {
+        padding: 20px 20px;
+        .boxLeft {
+            .title {
+                font-size: 20px;
+            }
+        }
+        .boxRight {
+            .iconSearch {
+                padding-right: 5px;
+            }
+            .iconFilter {
+                margin: 0 30px;
+                display: inline-block;
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+.wpResultEvent {
+    padding: 20px 0;
+    .tableResultEvent,
+    .colHead,
+    .colBody {
+        border: 1px solid;
+    }
+    .tableResultEvent {
+        width: 100%;
+        text-align: center;
+        border-collapse: collapse;
+        .tableBody {
+            .overText {
+                fieldset {
+                    border: none;
+                }
+            }
+            .selectAdviser {
+                fieldset {
+                    border: none;
+                }
+            }
+        }
+    }
+}

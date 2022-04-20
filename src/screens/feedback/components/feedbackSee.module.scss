@@ -1,0 +1,26 @@
+.wpFeedback {
+    .feedbackTitle {
+        font-size: 20px;
+    }
+    .customerFeedback {
+        .customerTitle {
+            text-align: center;
+        }
+        .wpInfo {
+            .item {
+                padding: 2px 0;
+            }
+            .iconTitle {
+                font-size: 12px;
+                padding-left: 5px;
+            }
+        }
+    }
+    .subtitle {
+        font-style: italic;
+        text-decoration: underline;
+    }
+    .contentFeedback {
+        padding: 10px 0;
+    }
+}
