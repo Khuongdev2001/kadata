@@ -19,7 +19,7 @@ function RouterPage() {
     return (
         <Router>
             <Routes>
-                <Route path="/login" element={<LoginContainer />} />
+                <Route path="/" element={<LoginContainer />} />
                 <Route path="/dashboard" element={<Logged><DashboardContainer /></Logged>} />
                 <Route path="/customer" element={<Logged><CustomerContainer /></Logged>} />
                 <Route path="/staff" element={<Logged><StaffContainer /></Logged>} />
@@ -31,7 +31,7 @@ function RouterPage() {
                 <Route path="/feedback" element={<Logged><FeedbackContainer /></Logged>} />
             </Routes>
         </Router>
-    )
+    )   
 }
 
 export default RouterPage;
