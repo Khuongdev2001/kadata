@@ -21,35 +21,79 @@ import { WageContext } from "../../../../../context/WageContext";
 import LevelItem from "./components/LevelItem";
 import SaveLevel from "./components/SaveLevel";
 import DeleteLevel from "./components/DeleteLevel";
+import { useAxiosAuth } from "../../../../../hook/api";
 
 function LevelContainer() {
+    const themeWage = React.useContext(WageContext);
+    const staffLevelRef = React.useRef({});
+    const [staffLevels, setStaffLevels] = React.useState([]);
+    React.useEffect(() => {
+        document.title = "Quản lý Cấp Bậc";
+        handleFetch();
+    }, []);
 
     const [filters, setFilters] = useState({
         search: "",
-        sort: {},
-        page: 1,
-        per_page: 10
+        sortField: {},
+        sort: null,
+        totalCount: 1,
+        pageCount: 1,
+        perPage: 10,
+        currentPage: 1
     });
     const navigate = useNavigate();
-    const [show, setShow] = useState({
-        isDelete: false,
-    });
+    function handleFetch(search = "") {
+        // boxLoadRef.current.setIshow(true);
+        useAxiosAuth.get(`admin/staff-level${search}`)
+            .then((value) => {
+                const result = value.data.data;
+                const { items, _meta } = result;
+                setStaffLevels(items);
+                // boxLoadRef.current.setIshow(false);
+                setFilters((filter) => {
+                    return {
+                        ...filter,
+                        ..._meta
+                    }
+                })
+            })
+            .catch((e) => {
+                alert(e);
+            })
+    }
+
     function handleSetSort(key, value) {
         const reverse = { asc: "desc", desc: "asc" };
-        setFilters((filters) => {
-            return {
-                ...filters,
-                sort: {
-                    [key]: reverse[value] ?? "asc"
-                }
-            }
-        });
+        const convert = { asc: `${key}`, desc: `-${key}` };
+        const fieldSort = reverse[value] ? reverse[value] : "asc";
+        const keySort = convert[fieldSort];
+        const filters_2 = {
+            ...filters,
+            sortField: {
+                [key]: fieldSort,
+            },
+            sort: keySort
+        }
+        handleFetch(setParam(filters_2));
+        setFilters(filters_2);
     };
 
+    function setParam(filters, path = "") {
+        const params = new URLSearchParams();
+        for (let field in filters) {
+            params.append(field, filters[field]);
+        }
+        return `${path}?${params.toString()}`;
+    }
 
-    return (<WageContext.Provider value={new Object()}>
-        <DeleteLevel />
-        <SaveLevel />
+    function handleSubmit(e) {
+        handleFetch(setParam(filters));
+        e.preventDefault();
+    }
+
+    return (<WageContext.Provider value={staffLevelRef.current}>
+        <DeleteLevel onSetStaffLevels={setStaffLevels} />
+        <SaveLevel onSetStaffLevels={setStaffLevels} />
         <div className={styles.wagePage}>
             <BoxFlex className={styles.wageTop} alignItems="center" justifyContent="space-between">
                 <div className={styles.boxLeft}>
@@ -93,7 +137,9 @@ function LevelContainer() {
                     />
                     <Button color="secondary" sx={{
                         ml: 1
-                    }} className={styles.ml} variant="contained" size="small">
+                    }}
+                        onClick={() => staffLevelRef.current.level.handleAdd()}
+                        className={styles.ml} variant="contained" size="small">
                         add New
                     </Button>
                 </BoxFlex>
@@ -111,36 +157,36 @@ function LevelContainer() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.name}
-                                    direction={filters.sort.name}
-                                    onClick={() => handleSetSort("name", filters.sort.name)}
+                                    active={filters.sortField.name}
+                                    direction={filters.sortField.name}
+                                    onClick={() => handleSetSort("name", filters.sortField.name)}
                                 >
                                     Cấp bậc
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.basic_pay}
-                                    direction={filters.sort.basic_pay}
-                                    onClick={() => handleSetSort("basic_pay", filters.sort.basic_pay)}
+                                    active={filters.sortField.pay_level}
+                                    direction={filters.sortField.pay_level}
+                                    onClick={() => handleSetSort("pay_level", filters.sortField.pay_level)}
                                 >
                                     Lương cấp bậc
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.allowance_pay}
-                                    direction={filters.sort.allowance_pay}
-                                    onClick={() => handleSetSort("allowance_pay", filters.sort.allowance_pay)}
+                                    active={filters.sortField.allowance_pay}
+                                    direction={filters.sortField.allowance_pay}
+                                    onClick={() => handleSetSort("allowance_pay", filters.sortField.allowance_pay)}
                                 >
                                     Phụ cấp
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.created_at}
-                                    direction={filters.sort.created_at}
-                                    onClick={() => handleSetSort("created_at", filters.sort.created_at)}
+                                    active={filters.sortField.created_at}
+                                    direction={filters.sortField.created_at}
+                                    onClick={() => handleSetSort("created_at", filters.sortField.created_at)}
                                 >
                                     Ngày Tạo
                                 </TableSortLabel>
@@ -152,8 +198,10 @@ function LevelContainer() {
                     </TableHead>
                     <TableBody>
                         {
-                            [1, 2, 2, 2, 2, 2, 2, 2, 2].map((value) => {
-                                return <LevelItem key={value} />;
+                            staffLevels.map((staffLevel, key) => {
+                                if(staffLevel){
+                                    return <LevelItem key={key} keys={key} staffLevel={staffLevel} />;
+                                }
                             })
                         }
                     </TableBody>
@@ -162,9 +210,9 @@ function LevelContainer() {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                page={2}
-                count={10}
-                rowsPerPage={12}
+                page={filters.currentPage}
+                count={filters.totalCount}
+                rowsPerPage={filters.perPage}
                 title="dev"
             />
         </div >

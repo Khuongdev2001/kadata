@@ -1,23 +1,27 @@
 .wpStatff {
     flex: 1;
     margin: 0 10px;
-    .listStaffItem {
-        margin: 5px 0;
-        padding: 5px;
-        cursor: pointer;
-        &:hover {
-            background: var(--violet);
-            border-radius: 5px;
-            color: var(--light);
-        }
-        .staffName {
-            font-weight: bold;
-            display: inline-block;
-        }
-        .btnRemove {
-            min-width: 30px;
-            width: 30px;
-            z-index: 10;
+    .listStaff {
+        height: 150px;
+        overflow: auto;
+        .listStaffItem {
+            margin: 5px 0;
+            padding: 5px;
+            cursor: pointer;
+            &:hover {
+                background: var(--violet);
+                border-radius: 5px;
+                color: var(--light);
+            }
+            .staffName {
+                font-weight: bold;
+                display: inline-block;
+            }
+            .btnRemove {
+                min-width: 30px;
+                width: 30px;
+                z-index: 10;
+            }
         }
     }
 }

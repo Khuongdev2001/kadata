@@ -10,6 +10,8 @@
         width: 49%;
     }
     .listCustomers {
+        height: 150px;
+        overflow: auto;
         .customerItem {
             cursor: pointer;
             height: 50px;

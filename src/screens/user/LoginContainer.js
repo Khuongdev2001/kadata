@@ -2,8 +2,16 @@ import React from "react";
 import { TextField, Button } from '@mui/material';
 import styles from "./listContainer.module.scss";
 import { BoxFlex, Box, Image, BoxLink } from "../../components";
+import LoginValidate, { field } from "./validates/LoginValidate";
 
 function LoginContainer() {
+    const [user, setUser] = React.useState(field);
+    function handleChange(key, value) {
+        setUser({
+            user,
+            [key]: value
+        });
+    }
     return (
         <BoxFlex className={styles.wrapper}>
             <Box className={styles.bgLogin}>
@@ -19,7 +27,7 @@ function LoginContainer() {
                         <h1 className={styles.title}>Login to your account</h1>
                         <div className={styles.formGroup}>
                             <TextField
-                                error
+                                onChange={(e) => handleChange("email", e.target.value)}
                                 id="outlined-error"
                                 label="Email"
                                 defaultValue="dev@gmail.com"
@@ -29,6 +37,7 @@ function LoginContainer() {
                         </div>
                         <div className={styles.formGroup}>
                             <TextField
+                                onChange={(e) => handleChange("password", e.target.value)}
                                 id="outlined-error"
                                 label="Password"
                                 size="small"

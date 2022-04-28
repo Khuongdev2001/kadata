@@ -8,7 +8,7 @@ import {
 import { Edit, Delete } from '@mui/icons-material';
 import { WageContext } from "../../../../../../context/WageContext";
 
-function LevelItem() {
+function LevelItem({ staffLevel, keys }) {
     const themeWage = React.useContext(WageContext);
     return (
         <TableRow
@@ -17,26 +17,28 @@ function LevelItem() {
             tabIndex={-1}
         >
             <TableCell>
-                1
+                {staffLevel.id}
             </TableCell>
             <TableCell>
-                Giám Đốc
+                {staffLevel.name}
             </TableCell>
             <TableCell>
-                20.000 VNĐ
+                {staffLevel.pay_level}
             </TableCell>
             <TableCell>
-                50.000 VNĐ
+                {staffLevel.allowance_pay}
             </TableCell>
-            <TableCell>12/10/2022</TableCell>
             <TableCell>
-                <Tooltip title="Edit" onClick={() => themeWage.level.handleAdd()}>
+                {staffLevel.created_at}
+            </TableCell>
+            <TableCell>
+                <Tooltip title="Edit" onClick={() => themeWage.level.handleUpdate(staffLevel.id, keys)}>
                     <IconButton>
                         <Edit />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete">
-                    <IconButton onClick={() => themeWage.level.handleDelete()}>
+                    <IconButton onClick={() => themeWage.level.handleDelete(staffLevel.id, keys)}>
                         <Delete />
                     </IconButton>
                 </Tooltip>

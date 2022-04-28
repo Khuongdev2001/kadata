@@ -9,7 +9,7 @@ import {
 import { Edit, Delete, RemoveRedEye } from '@mui/icons-material';
 import { FeedbackContext } from "../../../context/FeedbackContext";
 
-function FeedbackItem() {
+function FeedbackItem({ feedback, keys }) {
     const themeFeedback = React.useContext(FeedbackContext);
     return (<TableRow
         hover
@@ -22,27 +22,28 @@ function FeedbackItem() {
             />
         </TableCell>
         <TableCell>
-            1
+            {feedback.id}
         </TableCell>
         <TableCell>
-            Thay đổi chính sách
+            {feedback.report_title}
         </TableCell>
         <TableCell>
-            Vui lòng kiểm tra
+            {feedback.report_content}
         </TableCell>
         <TableCell>
-            Đối tác 1
+            {feedback.customer.name}
         </TableCell>
-        <TableCell>12/1/2022</TableCell>
-        <TableCell>Đã xử lý</TableCell>
+        <TableCell>{feedback.created_at}</TableCell>
+        <TableCell>{feedback.status_text}</TableCell>
+        <TableCell>{feedback.done_at}</TableCell>
         <TableCell>
-            <Tooltip title="Xem" onClick={() => themeFeedback.handleView()}>
+            <Tooltip title="Xem" onClick={() => themeFeedback.handleView(feedback.id, keys)}>
                 <IconButton>
                     <RemoveRedEye />
                 </IconButton>
             </Tooltip>
             <Tooltip title="Xóa">
-                <IconButton onClick={() => themeFeedback.handleDelete()}>
+                <IconButton onClick={() => themeFeedback.handleDelete(feedback.id, keys)}>
                     <Delete />
                 </IconButton>
             </Tooltip>

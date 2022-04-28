@@ -10,7 +10,7 @@ import {
 import { Edit, Delete } from '@mui/icons-material';
 import { StaffContext } from "../../../context/StaffContext";
 
-function StaffItem() {
+function StaffItem({ staff, keys }) {
     const saveStaff = React.useContext(StaffContext);
     return (
         <TableRow
@@ -24,25 +24,31 @@ function StaffItem() {
                 />
             </TableCell>
             <TableCell>
-                1
+                {staff.id}
             </TableCell>
             <TableCell>
-                OETC
+                {staff.staff_code}
             </TableCell>
             <TableCell>
-                Tổng giám đốc
+                {staff.staff_level_name}
             </TableCell>
-            <TableCell>Nguyễn Văn A</TableCell>
-            <TableCell>0856345642</TableCell>
-            <TableCell>Ocean Edu Trường Chinh,....</TableCell>
             <TableCell>
-                <Tooltip title="Edit" onClick={() => saveStaff.handleUpdate()}>
+                {staff.fullname}
+            </TableCell>
+            <TableCell>
+                {staff.phone}
+            </TableCell>
+            <TableCell>
+                {staff.address}
+            </TableCell>
+            <TableCell>
+                <Tooltip title="Edit" onClick={() => saveStaff.handleUpdate(staff.id, keys)}>
                     <IconButton>
                         <Edit />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete">
-                    <IconButton onClick={() => saveStaff.handleDelete()}>
+                    <IconButton onClick={() => saveStaff.handleDelete(staff.id, keys)}>
                         <Delete />
                     </IconButton>
                 </Tooltip>

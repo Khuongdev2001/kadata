@@ -8,10 +8,9 @@ import { useAxiosAuth } from "../../../hook/api";
 import SaveAdminValidate from "../validates/SaveAdmin";
 
 function SaveAdmin({ onSetAdmins }) {
-    const themeCustomer = React.useContext(AdminContext);
+    const themeAdmin = React.useContext(AdminContext);
     const themeLogged = React.useContext(LoggedContext);
     const [isShow, setIsShow] = React.useState(false);
-    const boxLoadingRef=React.useRef({});
     const action = React.useRef({
         adminId: null,
         isAdd: true,
@@ -25,7 +24,7 @@ function SaveAdmin({ onSetAdmins }) {
         password_confirm: "",
         status: 0
     });
-    themeCustomer.handleUpdate = function (id, key) {
+    themeAdmin.handleUpdate = function (id, key) {
         action.current.id = id;
         action.current.key = key;
         useAxiosAuth.get(`admin/site/view?id=${id}`)
@@ -43,7 +42,7 @@ function SaveAdmin({ onSetAdmins }) {
         setErrors({});
         setIsShow(true);
     }
-    themeCustomer.handleAdd = function () {
+    themeAdmin.handleAdd = function () {
         action.current.isAdd = true;
         setErrors({});
         setIsShow(true);
@@ -58,7 +57,6 @@ function SaveAdmin({ onSetAdmins }) {
         if (Object.keys(errors).length) {
             return;
         }
-        boxLoadingRef.current.setIsShow(true);
         useAxiosAuth.post(url, admin)
             .then(response => {
                 const result = response.data;
@@ -70,13 +68,17 @@ function SaveAdmin({ onSetAdmins }) {
                     else {
                         handleRenderUpdate(result.data.user);
                     }
-                    boxLoadingRef.current.setIsShow(false);
                     setIsShow(false);
                     return;
                 }
-                setErrors({
-                    email: result.data.email ? result.data.email[0] : null
-                })
+                else {
+                    const errors = result.data;
+                    const errorArr = [];
+                    for (let error in errors) {
+                        errorArr[error] = errors[error][0];
+                    }
+                    setErrors(errorArr);
+                }
             })
     }
 
@@ -95,7 +97,6 @@ function SaveAdmin({ onSetAdmins }) {
     }
     return (
         <Modal onSubmit={handleSubmit} isShow={isShow} onClose={() => setIsShow(false)} position="center">
-            <BoxLoading refer={boxLoadingRef} disableClick />
             <h2>{action.current.isAdd ?
                 "Thêm Quản Trị"
                 : "Cập Nhật Quản Trị"

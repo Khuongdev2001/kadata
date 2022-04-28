@@ -27,7 +27,7 @@ function AdminItem({ admin, keys }) {
                 {admin.fullname}
             </TableCell>
             <TableCell>
-                {admin.status}
+                {admin.status_text}
             </TableCell>
             <TableCell>{admin.created_at}</TableCell>
             <TableCell>

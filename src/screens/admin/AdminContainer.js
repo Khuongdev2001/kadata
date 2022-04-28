@@ -41,16 +41,13 @@ function AdminContainer() {
     });
     const [admins, setAdmins] = React.useState([]);
     const adminRef = React.useRef({});
-    const boxLoadRef = React.useRef({});
 
     function handleFetch(search = "") {
-        boxLoadRef.current.setIsShow(true);
         useAxiosAuth.get(`admin/site${search}`)
             .then((value) => {
                 const result = value.data.data;
                 const { items, _meta } = result;
                 setAdmins(items);
-                boxLoadRef.current.setIsShow(false);
                 setFilters((filter) => {
                     return {
                         ...filter,
@@ -103,7 +100,6 @@ function AdminContainer() {
 
 
     return (<AdminContext.Provider value={adminRef.current}>
-        <BoxLoading refer={boxLoadRef} />
         <DeleteAdmin onSetAdmins={setAdmins} />
         <SaveAdmin onSetAdmins={setAdmins} />
         <div className={styles.adminPage}>

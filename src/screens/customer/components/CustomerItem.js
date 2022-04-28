@@ -10,7 +10,7 @@ import {
 import { Edit, Delete } from '@mui/icons-material';
 import { CustomerContext } from "../../../context/CustomerContext";
 
-function CustomerItem() {
+function CustomerItem({ customer, keys }) {
     const themeCustomer = React.useContext(CustomerContext);
     return (<TableRow
         hover
@@ -23,25 +23,34 @@ function CustomerItem() {
             />
         </TableCell>
         <TableCell>
-            1
+            {customer.id}
         </TableCell>
         <TableCell>
-            OETC
+            {customer.customer_code}
         </TableCell>
         <TableCell>
-            Đối tác 1
+            {customer.name}
         </TableCell>
-        <TableCell>Nguyễn Văn A</TableCell>
-        <TableCell>0856345642</TableCell>
-        <TableCell>Ocean Edu Trường Chinh,....</TableCell>
         <TableCell>
-            <Tooltip title="Edit" onClick={() => themeCustomer.handleUpdate()}>
+            {customer.surrogate}
+        </TableCell>
+        <TableCell>
+            {customer.phone}
+        </TableCell>
+        <TableCell>
+            {customer.created_at}
+        </TableCell>
+        <TableCell>
+            {customer.address}
+        </TableCell>
+        <TableCell>
+            <Tooltip title="Edit" onClick={() => themeCustomer.handleUpdate(customer.id, keys)}>
                 <IconButton>
                     <Edit />
                 </IconButton>
             </Tooltip>
             <Tooltip title="Delete">
-                <IconButton onClick={() => themeCustomer.handleDelete()}>
+                <IconButton onClick={() => themeCustomer.handleDelete(customer.id, keys)}>
                     <Delete />
                 </IconButton>
             </Tooltip>

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./customerContainer.module.scss";
-import { BoxFlex } from "../../components";
+import { BoxFlex, BoxLoading } from "../../components";
 import {
     TextField,
     Tooltip,
@@ -16,41 +16,90 @@ import {
     TablePagination,
     Checkbox
 } from '@mui/material';
-import { FilterList } from '@mui/icons-material';
+import { FilterList, LocalPrintshop } from '@mui/icons-material';
 import FontAwesome from "react-fontawesome";
 import { CustomerContext } from "../../context/CustomerContext";
 import CustomerItem from "./components/CustomerItem";
 import DeleteCustomer from "./components/DeleteCustomer";
 import SaveCustomer from "./components/SaveCustomer";
+import { baseURL, useAxiosAuth } from "../../hook/api";
 
 function CustomerContainer() {
     const customerRef = React.useRef({});
-    function handleSetSort(key, value) {
-        const reverse = { asc: "desc", desc: "asc" };
-        setFilters((filters) => {
-            return {
-                ...filters,
-                sort: {
-                    [key]: reverse[value] ?? "asc"
-                }
-            }
-        });
-    };
+    const boxLoadRef = React.useRef({});
+    const [customers, setCustomers] = React.useState([]);
+    React.useEffect(() => {
+        document.title = "Quản lý đối tác";
+        handleFetch();
+    }, []);
+
+    function handleFetch(search = "") {
+        // boxLoadRef.current.setIshow(true);
+        useAxiosAuth.get(`admin/customer${search}`)
+            .then((value) => {
+                const result = value.data.data;
+                const { items, _meta } = result;
+                setCustomers(items);
+                // boxLoadRef.current.setIshow(false);
+                setFilters((filter) => {
+                    return {
+                        ...filter,
+                        ..._meta
+                    }
+                })
+            })
+            .catch((e) => {
+                alert(e);
+            })
+    }
     const [filters, setFilters] = React.useState({
         search: "",
-        sort: {},
-        page: 1,
-        per_page: 10
+        sortField: {},
+        sort: null,
+        totalCount: 1,
+        pageCount: 1,
+        perPage: 10,
+        currentPage: 1
     });
+
+    function handleSetSort(key, value) {
+        const reverse = { asc: "desc", desc: "asc" };
+        const convert = { asc: `${key}`, desc: `-${key}` };
+        const fieldSort = reverse[value] ? reverse[value] : "asc";
+        const keySort = convert[fieldSort];
+        const filters_2 = {
+            ...filters,
+            sortField: {
+                [key]: fieldSort,
+            },
+            sort: keySort
+        }
+        handleFetch(setParam(filters_2));
+        setFilters(filters_2);
+    };
+    /* Handle Url */
+    function setParam(filters, path = "") {
+        const params = new URLSearchParams();
+        for (let field in filters) {
+            params.append(field, filters[field]);
+        }
+        return `${path}?${params.toString()}`;
+    }
+
+    function handleSubmit(e) {
+        handleFetch(setParam(filters));
+        e.preventDefault();
+    }
     return (<CustomerContext.Provider value={customerRef.current}>
-        <DeleteCustomer />
-        <SaveCustomer />
+        <BoxLoading refer={boxLoadRef} />
+        <DeleteCustomer onSetCustomers={setCustomers} />
+        <SaveCustomer onSetCustomers={setCustomers} />
         <div className={styles.customerPage}>
             <BoxFlex className={styles.customerTop} alignItems="center" justifyContent="space-between">
                 <div className={styles.boxLeft}>
                     <h2 className={styles.title}>Danh sách đối tác</h2>
                 </div>
-                <div className={styles.boxRight}>
+                <form onSubmit={handleSubmit} className={styles.boxRight}>
                     <TextField
                         id="input-with-icon-textfield"
                         placeholder="Search list"
@@ -66,6 +115,13 @@ function CustomerContainer() {
                             ),
                         }}
                     />
+                    <a href={baseURL + "/admin/customer/build-pdf"} target="_blank" className={styles.iconPrint}>
+                        <Tooltip title="In Báo Cáo">
+                            <IconButton>
+                                <LocalPrintshop />
+                            </IconButton>
+                        </Tooltip>
+                    </a>
                     <span className={styles.iconFilter}>
                         <Tooltip title="Filter list">
                             <IconButton>
@@ -78,7 +134,7 @@ function CustomerContainer() {
                         color="secondary" className={styles.ml} variant="contained" size="small">
                         add New
                     </Button>
-                </div>
+                </form>
             </BoxFlex>
             <TableContainer>
                 <Table
@@ -101,18 +157,18 @@ function CustomerContainer() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.customerCode}
-                                    direction={filters.sort.customerCode}
-                                    onClick={() => handleSetSort("customerCode", filters.sort.customerCode)}
+                                    active={filters.sortField.customerCode}
+                                    direction={filters.sortField.customerCode}
+                                    onClick={() => handleSetSort("customerCode", filters.sortField.customerCode)}
                                 >
                                     Mã Đối Tác
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.customer}
-                                    direction={filters.sort.customer}
-                                    onClick={() => handleSetSort("customer", filters.sort.customer)}
+                                    active={filters.sortField.name}
+                                    direction={filters.sortField.name}
+                                    onClick={() => handleSetSort("name", filters.sortField.name)}
 
                                 >
                                     Tên đối tác
@@ -120,9 +176,9 @@ function CustomerContainer() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.surrogate}
-                                    direction={filters.sort.surrogate}
-                                    onClick={() => handleSetSort("surrogate", filters.sort.surrogate)}
+                                    active={filters.sortField.surrogate}
+                                    direction={filters.sortField.surrogate}
+                                    onClick={() => handleSetSort("surrogate", filters.sortField.surrogate)}
 
                                 >
                                     Người quản lý
@@ -130,9 +186,9 @@ function CustomerContainer() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.phone}
-                                    direction={filters.sort.phone}
-                                    onClick={() => handleSetSort("phone", filters.sort.phone)}
+                                    active={filters.sortField.phone}
+                                    direction={filters.sortField.phone}
+                                    onClick={() => handleSetSort("phone", filters.sortField.phone)}
 
                                 >
                                     Số điện thoại
@@ -140,11 +196,20 @@ function CustomerContainer() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.address}
-                                    direction={filters.sort.address}
-                                    onClick={() => handleSetSort("address", filters.sort.address)}
+                                    active={filters.sortField.address}
+                                    direction={filters.sortField.address}
+                                    onClick={() => handleSetSort("address", filters.sortField.address)}
                                 >
                                     Địa chỉ
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={filters.sortField.created_at}
+                                    direction={filters.sortField.created_at}
+                                    onClick={() => handleSetSort("created_at", filters.sortField.created_at)}
+                                >
+                                    Ngày tạo
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
@@ -154,7 +219,15 @@ function CustomerContainer() {
                     </TableHead>
                     <TableBody>
                         {
-                            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => <CustomerItem />)
+                            customers.map((customer, index) => {
+                                if (customer) {
+                                    return (<CustomerItem
+                                        onSetCustomers={setCustomers}
+                                        key={index}
+                                        keys={index}
+                                        customer={customer} />)
+                                }
+                            })
                         }
                     </TableBody>
                 </Table>

@@ -8,16 +8,19 @@ import Advise from "./Advise";
 
 function SaveEvent() {
     const themeDashboard = useContext(DashboardContext);
+    const adviseRef = React.useRef({});
     themeDashboard.handleUpdate = () => {
         setIshow(true);
     }
     const [isShow, setIshow] = React.useState(false);
     return (<Modal isShow={isShow} className={styles.wpEvent} showModalFooter={false} onClose={() => setIshow(false)} size="lg">
         <div className={styles.containerEvent}>
-            <Advise/>
+            <Advise refer={adviseRef.current} />
             <ResultEvent />
             <div className={styles.actionEvent}>
-                <Button type="info" radius="sm" size={"sm"} className={styles.btn}>
+                <Button
+                    onClick={() => adviseRef.current.handleAdvise()}
+                    type="info" radius="sm" size={"sm"} className={styles.btn}>
                     <FontAwesome name="database" /> <p className={styles.btnTitle}>Sắp xếp kết quả</p>
                 </Button>
                 <Button radius="sm" size="sm" className={styles.btn}>
@@ -30,9 +33,9 @@ function SaveEvent() {
                     <FontAwesome name="floppy-o" />
                     <p className={styles.btnTitle}>Lưu</p>
                 </Button>
-                <Button type="info" radius="sm"  size={"sm"} className={styles.btn}>
+                <Button type="info" radius="sm" size={"sm"} className={styles.btn}>
                     <FontAwesome name="upload" />
-                    <p  className={styles.btnTitle}>Sắp xếp trả kết quả</p>
+                    <p className={styles.btnTitle}>Sắp xếp trả kết quả</p>
                 </Button>
             </div>
         </div>

@@ -16,36 +16,81 @@ import {
     TablePagination,
     Checkbox
 } from '@mui/material';
-import { FilterList } from '@mui/icons-material';
+import { FilterList, LocalPrintshop } from '@mui/icons-material';
 import FontAwesome from "react-fontawesome";
 import { StaffContext } from "../../context/StaffContext";
 import StaffItem from "./components/StaffItem";
 import SaveStaff from "./components/SaveStaff";
 import DeleteStaff from "./components/DeleteStaff";
+import { baseURL, useAxiosAuth } from "../../hook/api";
 
 
 function StaffContainer() {
+    const [staffs, setStaffs] = React.useState([]);
     const staffRef = React.useRef({});
-    function handleSetSort(key, value) {
-        const reverse = { asc: "desc", desc: "asc" };
-        setFilters((filters) => {
-            return {
-                ...filters,
-                sort: {
-                    [key]: reverse[value] ?? "asc"
-                }
-            }
-        });
-    };
     const [filters, setFilters] = React.useState({
         search: "",
-        sort: {},
-        page: 1,
-        per_page: 10
+        sortField: {},
+        sort: null,
+        totalCount: 1,
+        pageCount: 1,
+        perPage: 10,
+        currentPage: 1
     });
+    React.useEffect(() => {
+        document.title = "Quản lý Nhân Sự";
+        handleFetch();
+    }, []);
+    function handleSetSort(key, value) {
+        const reverse = { asc: "desc", desc: "asc" };
+        const convert = { asc: `${key}`, desc: `-${key}` };
+        const fieldSort = reverse[value] ? reverse[value] : "asc";
+        const keySort = convert[fieldSort];
+        const filters_2 = {
+            ...filters,
+            sortField: {
+                [key]: fieldSort,
+            },
+            sort: keySort
+        }
+        handleFetch(setParam(filters_2));
+        setFilters(filters_2);
+    };
+    function setParam(filters, path = "") {
+        const params = new URLSearchParams();
+        for (let field in filters) {
+            params.append(field, filters[field]);
+        }
+        return `${path}?${params.toString()}`;
+    }
+
+    function handleFetch(search = "") {
+        // boxLoadRef.current.setIshow(true);
+        useAxiosAuth.get(`admin/staff${search}`)
+            .then((value) => {
+                const result = value.data.data;
+                const { items, _meta } = result;
+                setStaffs(items);
+                // boxLoadRef.current.setIshow(false);
+                setFilters((filter) => {
+                    return {
+                        ...filter,
+                        ..._meta
+                    }
+                })
+            })
+            .catch((e) => {
+                alert(e);
+            })
+    }
+
+    function handleSubmit(e) {
+        handleFetch(setParam(filters));
+        e.preventDefault();
+    }
     return (<StaffContext.Provider value={staffRef.current}>
-        <SaveStaff />
-        <DeleteStaff/>
+        <SaveStaff onSetStaffs={setStaffs} />
+        <DeleteStaff onSetStaffs={setStaffs} />
         <div className={styles.customerPage}>
             <BoxFlex className={styles.customerTop} alignItems="center" justifyContent="space-between">
                 <div className={styles.boxLeft}>
@@ -67,6 +112,13 @@ function StaffContainer() {
                             ),
                         }}
                     />
+                    <a href={baseURL + "/admin/staff/build-pdf"} target="_blank" className={styles.iconPrint}>
+                        <Tooltip title="In Báo Cáo">
+                            <IconButton>
+                                <LocalPrintshop />
+                            </IconButton>
+                        </Tooltip>
+                    </a>
                     <span className={styles.iconFilter}>
                         <Tooltip title="Filter list">
                             <IconButton>
@@ -102,18 +154,18 @@ function StaffContainer() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.staffCode}
-                                    direction={filters.sort.staffCode}
-                                    onClick={() => handleSetSort("staffCode", filters.sort.staffCode)}
+                                    active={filters.sortField.staffCode}
+                                    direction={filters.sortField.staffCode}
+                                    onClick={() => handleSetSort("staffCode", filters.sortField.staffCode)}
                                 >
                                     Mã NV
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.level}
-                                    direction={filters.sort.level}
-                                    onClick={() => handleSetSort("level", filters.sort.level)}
+                                    active={filters.sortField.level}
+                                    direction={filters.sortField.level}
+                                    onClick={() => handleSetSort("level", filters.sortField.level)}
 
                                 >
                                     Cấp bậc
@@ -121,9 +173,9 @@ function StaffContainer() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.staffName}
-                                    direction={filters.sort.staffName}
-                                    onClick={() => handleSetSort("staffName", filters.sort.staffName)}
+                                    active={filters.sortField.fullname}
+                                    direction={filters.sortField.fullname}
+                                    onClick={() => handleSetSort("fullname", filters.sortField.fullname)}
 
                                 >
                                     Tên nhân viên
@@ -131,19 +183,19 @@ function StaffContainer() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={filters.sort.phone}
-                                    direction={filters.sort.phone}
-                                    onClick={() => handleSetSort("phone", filters.sort.phone)}
+                                    active={filters.sortField.phone}
+                                    direction={filters.sortField.phone}
+                                    onClick={() => handleSetSort("phone", filters.sortField.phone)}
 
                                 >
                                     Số điện thoại
                                 </TableSortLabel>
                             </TableCell>
-                            <TableCell>
+                            <TableCell width={200}>
                                 <TableSortLabel
-                                    active={filters.sort.address}
-                                    direction={filters.sort.address}
-                                    onClick={() => handleSetSort("address", filters.sort.address)}
+                                    active={filters.sortField.address}
+                                    direction={filters.sortField.address}
+                                    onClick={() => handleSetSort("address", filters.sortField.address)}
                                 >
                                     Địa chỉ
                                 </TableSortLabel>
@@ -155,7 +207,11 @@ function StaffContainer() {
                     </TableHead>
                     <TableBody>
                         {
-                            [1, 2, 3, 4, 5, 6, 7, 7].map(() => <StaffItem />)
+                            staffs.map((staff, key) => {
+                                if (staff) {
+                                    return <StaffItem staff={staff} keys={key} key={key} />
+                                }
+                            })
                         }
                     </TableBody>
                 </Table>
