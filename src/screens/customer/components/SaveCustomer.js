@@ -17,7 +17,6 @@ function SaveCustomer({ onSetCustomers }) {
         isLoad: false
     });
     const customerRef = React.useRef({});
-    const boxLoadRef = React.useRef({});
     const [customer, setCustomer] = React.useState({
         address: "",
         name: "",
@@ -25,6 +24,11 @@ function SaveCustomer({ onSetCustomers }) {
     });
     const [errors, setErrors] = React.useState({});
     themeCustomer.handleUpdate = function (id, key) {
+        setCustomer({
+            address: "",
+            name: "",
+            phone: "",
+        })
         action.current.id = id;
         action.current.key = key;
         useAxiosAuth.get(`admin/customer/view?id=${id}`)
@@ -44,6 +48,11 @@ function SaveCustomer({ onSetCustomers }) {
     themeCustomer.handleAdd = function () {
         action.current.isAdd = true;
         setErrors({});
+        setCustomer({
+            address: "",
+            name: "",
+            phone: "",
+        })
         setIsShow(true);
     }
 
@@ -109,9 +118,9 @@ function SaveCustomer({ onSetCustomers }) {
     return (<Modal onSubmit={handleSubmit} isShow={isShow} onClose={() => setIsShow(false)} size="xl">
         <h2>
             {action.current.isAdd ?
-            "Thêm Đối Tác"
-            : "Cập Nhật Đối Tác"
-        }</h2>
+                "Thêm Đối Tác"
+                : "Cập Nhật Đối Tác"
+            }</h2>
         <Grid container spacing={2} sx={{ py: 2 }}>
             {
                 fields.map((field, key) => {

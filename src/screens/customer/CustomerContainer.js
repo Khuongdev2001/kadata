@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./customerContainer.module.scss";
-import { BoxFlex, BoxLoading } from "../../components";
+import { BoxFlex } from "../../components";
 import {
     TextField,
     Tooltip,
@@ -26,7 +26,6 @@ import { baseURL, useAxiosAuth } from "../../hook/api";
 
 function CustomerContainer() {
     const customerRef = React.useRef({});
-    const boxLoadRef = React.useRef({});
     const [customers, setCustomers] = React.useState([]);
     React.useEffect(() => {
         document.title = "Quản lý đối tác";
@@ -91,7 +90,6 @@ function CustomerContainer() {
         e.preventDefault();
     }
     return (<CustomerContext.Provider value={customerRef.current}>
-        <BoxLoading refer={boxLoadRef} />
         <DeleteCustomer onSetCustomers={setCustomers} />
         <SaveCustomer onSetCustomers={setCustomers} />
         <div className={styles.customerPage}>
