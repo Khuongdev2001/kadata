@@ -24,7 +24,7 @@ function LoginContainer() {
                     </BoxLink>
                     <form action="" className={styles.form}>
                         <span className={styles.subTitle}>Welcome back</span>
-                        <h1 className={styles.title}>Login to your account</h1>
+                        <h1 className={styles.title}>Đăng Nhập</h1>
                         <div className={styles.formGroup}>
                             <TextField
                                 onChange={(e) => handleChange("email", e.target.value)}
