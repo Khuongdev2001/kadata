@@ -4,9 +4,12 @@ import styles from "./staffItem.module.scss";
 import { Autocomplete, TextField, Button } from "@mui/material";
 import { Close, Add } from '@mui/icons-material';
 import { useAxiosAuth } from "../../../hook/api";
+import AssignStaffValidate from "../validates/AddStaff";
 
-function StaffItem({ advise, setAdvise, errors }) {
-    const [customerOptions, setCustomerOptions] = React.useState([]);
+function StaffItem({ advise, setAdvise, errors, onSetErrorEmpty }) {
+    // set error inline
+    const [error, setError] = React.useState({});
+    const [staffOptions, setStaffOptions] = React.useState([]);
     const staffs = advise.staff;
     const [staff, setStaff] = React.useState({
         id: null,
@@ -18,14 +21,17 @@ function StaffItem({ advise, setAdvise, errors }) {
             .then(response => {
                 const result = response.data;
                 if (result.status) {
-                    setCustomerOptions(result.data.items);
+                    setStaffOptions(result.data.items);
                 }
             })
     }, []);
 
     function handleAddStaff({ id, fullname }) {
-        if (!fullname) {
-            alert("Không Được Để Trống Tên Đối Tác Hoặc Số Lượng");
+        // set error inline
+        const error = AssignStaffValidate({ fullname });
+        setError(error);
+        onSetErrorEmpty();
+        if (Object.keys(error).length) {
             return false;
         }
         setAdvise((advise) => {
@@ -72,6 +78,17 @@ function StaffItem({ advise, setAdvise, errors }) {
         }
     }
 
+    function handleRenderOption(props, staff) {
+        const index = staffs.findIndex(item => {
+            return item.id == staff.id;
+        })
+        if (index == -1) {
+            return (<li {...props}>
+                {staff.fullname}
+            </li>);
+        }
+    };
+
     return (<div className={styles.wpStatff}>
         <div className={styles.topTitle}>
             <h4>Nhân Viên</h4>
@@ -81,12 +98,15 @@ function StaffItem({ advise, setAdvise, errors }) {
                 id="highlights-demo"
                 sx={{ mb: 0 }}
                 fullWidth
-                options={customerOptions}
+                options={staffOptions}
                 size="small"
                 onChange={(e, newValue) => setStaff(newValue)}
                 getOptionLabel={handleSetOption}
+                renderOption={handleRenderOption}
                 renderInput={(params) => (
-                    <TextField error={Boolean(errors.staff)} helperText={errors.staff}
+                    <TextField
+                        error={Boolean(error.fullname ? error.fullname : errors.staff)}
+                        helperText={error.fullname ? error.fullname : errors.staff}
                         {...params} label="Nhân Viên" margin="normal" />
                 )}
             />

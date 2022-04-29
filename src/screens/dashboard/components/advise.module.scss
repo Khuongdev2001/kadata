@@ -1,0 +1,11 @@
+.actionEvent {
+    float: right;
+    .btn {
+        margin: 10px 5px;
+    }
+    .btnTitle {
+        font-size: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}

@@ -85,6 +85,15 @@ useValidator.maxValue = function (key, message, maxValue) {
     }
 }
 
+useValidator.minValue = function (key, message, minValue) {
+    return {
+        key,
+        test: function (value) {
+            return value < minValue ? message : undefined;
+        }
+    }
+}
+
 /**
  * @param int key 
  * @param string message 

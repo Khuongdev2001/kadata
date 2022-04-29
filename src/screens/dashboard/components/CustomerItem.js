@@ -4,8 +4,11 @@ import styles from "./customerItem.module.scss";
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { Close, Add } from '@mui/icons-material';
 import { useAxiosAuth } from "../../../hook/api";
-function CustomerItem({ advise, setAdvise, errors }) {
+import AssignCustomerValidate from "../validates/AddCustomer";
 
+function CustomerItem({ advise, setAdvise, onSetErrorEmpty, errors }) {
+    // set error inline
+    const [error, setError] = React.useState({});
     const customers = advise.customer;
     const [customerOptions, setCustomerOptions] = React.useState([]);
     const [customer, setCustomer] = React.useState({
@@ -24,8 +27,11 @@ function CustomerItem({ advise, setAdvise, errors }) {
     }, []);
 
     function handleAddCustomer({ name, id, qty }) {
-        if (!name || !qty) {
-            alert("Không Được Để Trống Tên Đối Tác Hoặc Số Lượng");
+        // set error inline
+        const error = AssignCustomerValidate({ name, qty });
+        setError(error);
+        onSetErrorEmpty();
+        if (Object.keys(error).length) {
             return false;
         }
         setCustomer({
@@ -67,10 +73,21 @@ function CustomerItem({ advise, setAdvise, errors }) {
         if (index != -1) {
             return "";
         }
-        else {
-            return customer.name;
-        }
+        return customer.name;
     }
+
+
+    function handleRenderOption(props, customer) {
+        const index = customers.findIndex(item => {
+            return item.id == customer.id;
+        })
+        if (index != -1) {
+            return "";
+        }
+        return (<li {...props}>
+            {customer.name}
+        </li>);
+    };
 
     return (<div className={styles.wpCustomer}>
         <BoxFlex justifyContent="space-between">
@@ -88,8 +105,15 @@ function CustomerItem({ advise, setAdvise, errors }) {
                     size="small"
                     className={styles.customer}
                     getOptionLabel={handleSetOption}
+                    renderOption={handleRenderOption}
                     renderInput={(params) => (
-                        <TextField error={Boolean(errors.customer)} helperText={errors.customer} sx={{ m: 0 }} value={customer.customer_name} fullWidth {...params} label="Đối Tác" margin="normal" />
+                        <TextField
+                            error={Boolean(error.name ? error.name : errors.customer)}
+                            helperText={error.name ? error.name : errors.customer}
+                            sx={{ m: 0 }}
+                            fullWidth
+                            value={customer.name}
+                            {...params} label="Đối Tác" margin="normal" />
                     )}
                 />
             </div>
@@ -97,9 +121,11 @@ function CustomerItem({ advise, setAdvise, errors }) {
                 <h4 className={[styles.numMember, styles.title].join(" ")}>Yêu cầu số lượng</h4>
                 <TextField
                     type="number"
+                    error={Boolean(error.qty)}
+                    helperText={error.qty ?? ""}
                     onChange={(e) => setCustomer({
                         ...customer,
-                        qty: e.target.value
+                        qty: Number(e.target.value)
                     })}
                     value={customer.qty}
                     className={styles.numStaffItem} fullWidth size="small" label="Số Lượng" variant="outlined" />

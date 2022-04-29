@@ -1,43 +1,57 @@
 import React, { useContext } from "react";
-import { Modal, Button } from "../../../components";
+import { Modal } from "../../../components";
 import { DashboardContext } from "../../../context/DashboardContext";
 import styles from "./saveEvent.module.scss";
 import ResultEvent from "./ResultEvent";
-import FontAwesome from "react-fontawesome";
 import Advise from "./Advise";
+import { Tab, Box } from "@mui/material";
+import { TabList, TabPanel, TabContext } from '@mui/lab';
+import { useAxiosAuth } from "../../../hook/api";
 
 function SaveEvent() {
+    const [tab, setTab] = React.useState(1);
     const themeDashboard = useContext(DashboardContext);
     const adviseRef = React.useRef({});
-    themeDashboard.handleUpdate = () => {
+    const eventRef = React.useRef({
+        id: null,
+        key: null,
+        isAdd: true
+    })
+    themeDashboard.handleUpdate = (id, key) => {
+        eventRef.current = {
+            id, key, isAdd: false
+        };
+        setIshow(true);
+    }
+    themeDashboard.handleAdd = () => {
+        eventRef.current.isAdd = true;
         setIshow(true);
     }
     const [isShow, setIshow] = React.useState(false);
+
+    function handleChangeTab(e, value) {
+        setTab(value);
+    }
     return (<Modal isShow={isShow} className={styles.wpEvent} showModalFooter={false} onClose={() => setIshow(false)} size="lg">
         <div className={styles.containerEvent}>
-            <Advise refer={adviseRef.current} />
-            <ResultEvent />
-            <div className={styles.actionEvent}>
-                <Button
-                    onClick={() => adviseRef.current.handleAdvise()}
-                    type="info" radius="sm" size={"sm"} className={styles.btn}>
-                    <FontAwesome name="database" /> <p className={styles.btnTitle}>Sắp xếp kết quả</p>
-                </Button>
-                <Button radius="sm" size="sm" className={styles.btn}>
-                    <FontAwesome name="print" /><p className={styles.btnTitle}>In</p>
-                </Button>
-                <Button type="danger" radius="sm" size="sm" className={styles.btn}>
-                    <FontAwesome name="trash" /> <p className={styles.btnTitle}>Xóa</p>
-                </Button>
-                <Button type="success" radius="sm" size="sm" className={styles.btn}>
-                    <FontAwesome name="floppy-o" />
-                    <p className={styles.btnTitle}>Lưu</p>
-                </Button>
-                <Button type="info" radius="sm" size={"sm"} className={styles.btn}>
-                    <FontAwesome name="upload" />
-                    <p className={styles.btnTitle}>Sắp xếp trả kết quả</p>
-                </Button>
-            </div>
+            <TabContext value={tab}>
+                <Box sx={{ width: '100%' }}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList value={tab} onChange={handleChangeTab} aria-label="basic tabs example">
+                            <Tab label="Sắp Xếp Tư Vấn" value={1} />
+                            {!eventRef.current.isAdd && <Tab label="Sắp Xếp Trả Kết Quả" value={2} />}
+                        </TabList>
+                    </Box>
+                    <TabPanel value={1} index={0}>
+                        <Advise onIsShow={setIshow} eventRef={eventRef} />
+                    </TabPanel>
+                    {!eventRef.current.isAdd && (
+                        <TabPanel value={2} index={1}>
+                            <ResultEvent />
+                        </TabPanel>
+                    )}
+                </Box>
+            </TabContext>
         </div>
     </Modal>)
 }

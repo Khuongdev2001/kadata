@@ -21,17 +21,16 @@ import FontAwesome from "react-fontawesome";
 import { DashboardContext } from "../../context/DashboardContext";
 import SaveEvent from "./components/SaveEvent";
 import DashboardItem from "./components/DashboardItem";
+import DeleteDashboard from "./components/DeleteDashboard";
+import { baseURL, useAxiosAuth } from "../../hook/api";
 
 function DashboardContainer() {
-    const [filters, setFilters] = useState({
-        search: "",
-        sort: {},
-        page: 1,
-        per_page: 10
-    });
+    const dashboardRef = React.useRef({});
+    const [dashboards, setDashboards] = React.useState([]);
     const [show, setShow] = useState({
         isDelete: false,
     });
+    dashboardRef.current.onSetDashboards = setDashboards;
     function handleSetSort(key, value) {
         const reverse = { asc: "desc", desc: "asc" };
         setFilters((filters) => {
@@ -44,21 +43,76 @@ function DashboardContainer() {
         });
     };
 
-    function handleSetShow(key, isType) {
-        setShow((prev) => ({ ...prev, [key]: isType }));
+    React.useEffect(() => {
+        document.title = "Quản lý sự kiện";
+        handleFetch();
+    }, []);
+
+    function handleFetch(search = "") {
+        // boxLoadRef.current.setIshow(true);
+        useAxiosAuth.get(`admin/event${search}`)
+            .then((value) => {
+                const result = value.data.data;
+                const { items, _meta } = result;
+                setDashboards(items);
+                // boxLoadRef.current.setIshow(false);
+                setFilters((filter) => {
+                    return {
+                        ...filter,
+                        ..._meta
+                    }
+                })
+            })
+            .catch((e) => {
+                alert(e);
+            })
+    }
+
+    const [filters, setFilters] = React.useState({
+        search: "",
+        sortField: {},
+        sort: null,
+        totalCount: 1,
+        pageCount: 1,
+        perPage: 10,
+        currentPage: 1
+    });
+
+    function handleSetSort(key, value) {
+        const reverse = { asc: "desc", desc: "asc" };
+        const convert = { asc: `${key}`, desc: `-${key}` };
+        const fieldSort = reverse[value] ? reverse[value] : "asc";
+        const keySort = convert[fieldSort];
+        const filters_2 = {
+            ...filters,
+            sortField: {
+                [key]: fieldSort,
+            },
+            sort: keySort
+        }
+        handleFetch(setParam(filters_2));
+        setFilters(filters_2);
+    };
+
+    /* Handle Url */
+    function setParam(filters, path = "") {
+        const params = new URLSearchParams();
+        for (let field in filters) {
+            params.append(field, filters[field]);
+        }
+        return `${path}?${params.toString()}`;
+    }
+
+    function handleSubmit(e) {
+        handleFetch(setParam(filters));
+        e.preventDefault();
     }
 
     return (
-        <DashboardContext.Provider value={new Object()}>
+        <DashboardContext.Provider value={dashboardRef.current}>
+            <DeleteDashboard onSetDashboards={setDashboards} />
             <SaveEvent />
             <div className={styles.dashboardPage}>
-                {
-                    show.isDelete && (
-                        <Modal isShow={true} onClose={() => handleSetShow("isDelete", false)} size="sm" position="center">
-                            Xóa Sự Kiện Này?
-                        </Modal>
-                    )
-                }
                 <BoxFlex className={styles.dashboardTop} alignItems="center" justifyContent="space-between">
                     <div className={styles.boxLeft}>
                         <h2 className={styles.title}>Danh sách sự kiện</h2>
@@ -89,8 +143,10 @@ function DashboardContainer() {
                                 </IconButton>
                             </Tooltip>
                         </span>
-                        <Button color="secondary" className={styles.ml} variant="contained" size="small">
-                            add New
+                        <Button color="secondary"
+                            onClick={() => dashboardRef.current.handleAdd()}
+                            className={styles.ml} variant="contained" size="small">
+                            Thêm Sự Kiện
                         </Button>
                     </div>
                 </BoxFlex>
@@ -115,47 +171,53 @@ function DashboardContainer() {
                                 </TableCell>
                                 <TableCell>
                                     <TableSortLabel
-                                        active={filters.sort.name}
-                                        direction={filters.sort.name}
-                                        onClick={() => handleSetSort("name", filters.sort.name)}
+                                        active={filters.sortField.name}
+                                        direction={filters.sortField.name}
+                                        onClick={() => handleSetSort("name", filters.sortField.name)}
                                     >
                                         Tên Sự Kiện
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
                                     <TableSortLabel
-                                        active={filters.sort.code_event}
-                                        direction={filters.sort.code_event}
-                                        onClick={() => handleSetSort("code_event", filters.sort.code_event)}
+                                        active={filters.sortField.code}
+                                        direction={filters.sortField.code}
+                                        onClick={() => handleSetSort("code", filters.sortField.code)}
                                     >
                                         Mã Sự Kiện
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
                                     <TableSortLabel
-                                        active={filters.sort.created_at}
-                                        direction={filters.sort.created_at}
-                                        onClick={() => handleSetSort("created_at", filters.sort.created_at)}
+                                        active={filters.sortField.created_at}
+                                        direction={filters.sortField.created_at}
+                                        onClick={() => handleSetSort("created_at", filters.sortField.created_at)}
                                     >
-                                        Ngày
+                                        Ngày Tạo
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
                                     <TableSortLabel
-                                        active={filters.sort.customer}
-                                        direction={filters.sort.customer}
-                                        onClick={() => handleSetSort("customer", filters.sort.customer)}
+                                        active={filters.sortField.start_at}
+                                        direction={filters.sortField.start_at}
+                                        onClick={() => handleSetSort("start_at", filters.sortField.start_at)}
                                     >
-                                        Đối Tác
+                                        Ngày Diễn Ra
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
-                                    Actions
+                                    Hành Động
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {[1].map(item => <DashboardItem key={item} />)}
+                            {dashboards.map((dashboard, index) => {
+                                if (dashboard) {
+                                    return (
+                                        <DashboardItem event={dashboard} key={index} keys={index} />
+                                    )
+                                }
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
