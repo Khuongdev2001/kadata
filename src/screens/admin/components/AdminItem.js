@@ -31,12 +31,12 @@ function AdminItem({ admin, keys }) {
             </TableCell>
             <TableCell>{admin.created_at}</TableCell>
             <TableCell>
-                <Tooltip title="Edit" onClick={() => themeAdmin.handleUpdate(admin.id, keys)}>
+                <Tooltip title="Chỉnh sửa" onClick={() => themeAdmin.handleUpdate(admin.id, keys)}>
                     <IconButton>
                         <Edit />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Delete">
+                <Tooltip title="Xóa">
                     <IconButton onClick={() => themeAdmin.handleDelete(admin.id, keys)}>
                         <Delete />
                     </IconButton>

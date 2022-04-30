@@ -110,7 +110,7 @@ function AdminContainer() {
                 <form action="" onSubmit={handleSubmit} className={styles.boxRight}>
                     <TextField
                         id="input-with-icon-textfield"
-                        placeholder="Search list"
+                        placeholder="Tìm kiếm"
                         size="small"
                         variant="standard"
                         value={filters.search}
@@ -134,7 +134,7 @@ function AdminContainer() {
                         </Tooltip>
                     </span>
                     <Button onClick={handleShowAdd} color="secondary" className={styles.ml} variant="contained" size="small">
-                        add New
+                        Thêm mới
                     </Button>
                 </form>
             </BoxFlex>
@@ -186,7 +186,7 @@ function AdminContainer() {
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
-                                Actions
+                                Hành động
                             </TableCell>
                         </TableRow>
                     </TableHead>

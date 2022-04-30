@@ -1,15 +1,15 @@
-const addUser = function (payload) {
+const loginUser = function (payload) {
     return {
-        type: "ADD_USER",
+        type: "LOGIN_USER",
         payload
     }
 }
 
-const updateUser = function (payload) {
+const logoutUser = function (payload) {
     return {
-        type: "UPDATE_USER",
+        type: "LOGOUT_USER",
         payload
     }
 };
 
-export { addUser,updateUser };
+export { loginUser, logoutUser };

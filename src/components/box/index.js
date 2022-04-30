@@ -15,8 +15,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export function SnackbarsStyled({ children, ...props }) {
+    const [open, setOpen] = React.useState(true);
     return (
-        <Snackbar {...props}>
+        <Snackbar open={open} onClose={() => setOpen(false)} {...props} autoHideDuration={2000}>
             <Alert severity={props.type} sx={{ width: '100%' }}>
                 {children}
             </Alert>
@@ -256,17 +257,11 @@ export const BoxFlex = styled.div`
 `;
 
 export function BoxLoading(props) {
-    const [isShow, setIsShow] = React.useState(props.isShow);
-    props.refer.current = {
-        setIsShow
-    }
     return (
-        isShow && (
-            <BoxMui sx={{ width: '100%', position: "absolute", top: "0px", left: "0px" }}>
-                {props.disableClick && <BoxDisableClick background="light" />}
-                <LinearProgress />
-            </BoxMui>
-        )
+        <BoxMui sx={{ width: '100%', position: "absolute", top: "0px", left: "0px" }}>
+            {props.disableClick && <BoxDisableClick background="light" />}
+            <LinearProgress />
+        </BoxMui>
     );
 }
 

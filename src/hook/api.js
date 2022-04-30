@@ -2,7 +2,7 @@ import axios from "axios";
 
 const user = JSON.parse(localStorage.getItem("user"))
     ? JSON.parse(localStorage.getItem("user")) : new Object;
-export const baseURL = `https://app-9bbddfec-10f7-4e5c-9997-e3710b6501ab.cleverapps.io/v1`;
+export const baseURL = `http://localhost:8080/v1`;
 
 const useAxiosUnAuth = axios.create(
     {
@@ -15,7 +15,7 @@ const useAxiosAuth = axios.create(({
     baseURL,
     headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt}`
+        Authorization: `Bearer ${user.token}`
     }
 }));
 
@@ -23,7 +23,7 @@ const useAxiosAuthFormData = axios.create({
     baseURL,
     headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt}`,
+        Authorization: `Bearer ${user.token}`,
         "Content-Type": "multipart/form-data"
     }
 });

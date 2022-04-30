@@ -1,0 +1,12 @@
+.wpLogo {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, 0);
+    .loadingItem {
+        margin: 10px 0px;
+        width: 20px !important;
+        height: 20px !important;
+        color: var(--green);
+    }
+}
