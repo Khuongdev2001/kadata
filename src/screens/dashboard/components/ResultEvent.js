@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./resultEvent.module.scss";
+import { Modal } from "../../../components";
 import { Checkbox, TextField, Autocomplete } from "@mui/material";
 
 

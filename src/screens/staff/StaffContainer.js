@@ -129,7 +129,7 @@ function StaffContainer() {
                     <Button
                         onClick={() => staffRef.current.handleAdd()}
                         color="secondary" className={styles.ml} variant="contained" size="small">
-                        add New
+                        Thêm Mới
                     </Button>
                 </div>
             </BoxFlex>

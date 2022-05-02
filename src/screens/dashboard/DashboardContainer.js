@@ -146,7 +146,7 @@ function DashboardContainer() {
                         <Button color="secondary"
                             onClick={() => dashboardRef.current.handleAdd()}
                             className={styles.ml} variant="contained" size="small">
-                            Thêm Sự Kiện
+                            Thêm Mới
                         </Button>
                     </div>
                 </BoxFlex>

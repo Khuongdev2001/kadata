@@ -42,12 +42,12 @@ function StaffItem({ staff, keys }) {
                 {staff.address}
             </TableCell>
             <TableCell>
-                <Tooltip title="Edit" onClick={() => saveStaff.handleUpdate(staff.id, keys)}>
+                <Tooltip title="Chỉnh sửa" onClick={() => saveStaff.handleUpdate(staff.id, keys)}>
                     <IconButton>
                         <Edit />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Delete">
+                <Tooltip title="Xóa">
                     <IconButton onClick={() => saveStaff.handleDelete(staff.id, keys)}>
                         <Delete />
                     </IconButton>

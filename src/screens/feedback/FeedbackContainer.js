@@ -129,7 +129,7 @@ function FeedbackContainer() {
                         <Button
                             onClick={() => feedbackRef.current.handleAdd()}
                             color="secondary" className={styles.ml} variant="contained" size="small">
-                            add New
+                            Thêm mới
                         </Button>
                     </BoxFlex>
                 </BoxFlex>

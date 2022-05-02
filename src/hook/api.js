@@ -2,7 +2,7 @@ import axios from "axios";
 
 const user = JSON.parse(localStorage.getItem("user"))
     ? JSON.parse(localStorage.getItem("user")) : new Object;
-export const baseURL = `http://app-9bbddfec-10f7-4e5c-9997-e3710b6501ab.cleverapps.io//v1`;
+export const baseURL = `https://app-9bbddfec-10f7-4e5c-9997-e3710b6501ab.cleverapps.io/v1`;
 
 const useAxiosUnAuth = axios.create(
     {

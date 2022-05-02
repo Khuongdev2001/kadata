@@ -130,7 +130,7 @@ function CustomerContainer() {
                     <Button
                         onClick={() => customerRef.current.handleAdd()}
                         color="secondary" className={styles.ml} variant="contained" size="small">
-                        add New
+                        Thêm mới
                     </Button>
                 </form>
             </BoxFlex>

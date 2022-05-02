@@ -24,14 +24,12 @@ function RouterPage() {
                 <Route path="/customer" element={<Logged><CustomerContainer /></Logged>} />
                 <Route path="/staff" element={<Logged><StaffContainer /></Logged>} />
                 <Route path="/admin" element={<Logged><AdminContainer /></Logged>} />
-                <Route path="/wage">
-                    <Route path="" element={<Logged><WageContainer /></Logged>} />
-                    <Route path="level" element={<Logged><LevelContainer /></Logged>} />
-                </Route>
+                <Route path="/wage" element={<Logged><WageContainer /></Logged>} />
+                <Route path="/wage/level" element={<Logged><LevelContainer /></Logged>} />
                 <Route path="/feedback" element={<Logged><FeedbackContainer /></Logged>} />
             </Routes>
         </Router>
-    )   
+    )
 }
 
 export default RouterPage;
