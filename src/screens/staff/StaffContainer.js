@@ -216,14 +216,14 @@ function StaffContainer() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
+            {/* <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 page={2}
                 count={10}
                 rowsPerPage={12}
                 title="dev"
-            />
+            /> */}
         </div >
     </StaffContext.Provider>)
 

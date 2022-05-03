@@ -13,7 +13,8 @@ import StaffContainer from "./screens/staff/StaffContainer";
 import AdminContainer from "./screens/admin/AdminContainer";
 import WageContainer from "./screens/wage/WageContainer";
 import LevelContainer from "./screens/wage/components/pages/level/LevelContainer";
-import FeedbackContainer from "./screens/feedback/FeedbackContainer"
+import FeedbackContainer from "./screens/feedback/FeedbackContainer";
+import ResultEventContainer from "./screens/resultEvent/ResultEventContainer";
 
 function RouterPage() {
     return (
@@ -21,6 +22,7 @@ function RouterPage() {
             <Routes>
                 <Route path="/" element={<LoginContainer />} />
                 <Route path="/dashboard" element={<Logged><DashboardContainer /></Logged>} />
+                <Route path="/dashboard/:id" element={<Logged><ResultEventContainer/></Logged>}/>
                 <Route path="/customer" element={<Logged><CustomerContainer /></Logged>} />
                 <Route path="/staff" element={<Logged><StaffContainer /></Logged>} />
                 <Route path="/admin" element={<Logged><AdminContainer /></Logged>} />

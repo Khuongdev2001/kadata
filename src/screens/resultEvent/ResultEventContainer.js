@@ -1,7 +1,9 @@
-import React, { useContext, useState } from "react";
-import styles from "./dashboardContainer.module.scss";
-import { BoxFlex, Modal } from "../../components";
+import React, { useState } from "react";
+import styles from "./resultEventContainer.module.scss";
+import { BoxFlex } from "../../components";
 import {
+    Breadcrumbs,
+    Link,
     TextField,
     Tooltip,
     IconButton,
@@ -16,21 +18,27 @@ import {
     TablePagination,
     Checkbox
 } from '@mui/material';
-import { FilterList } from '@mui/icons-material';
+import { Sync, LocalPrintshop } from '@mui/icons-material';
 import FontAwesome from "react-fontawesome";
-import { DashboardContext } from "../../context/DashboardContext";
-import SaveEvent from "./components/SaveEvent";
-import DashboardItem from "./components/DashboardItem";
-import DeleteDashboard from "./components/DeleteDashboard";
+import { LoggedContext } from "../../context/LoggedContext";
+import { ResultEventContext } from "../../context/ResultEventContext";
 import { baseURL, useAxiosAuth } from "../../hook/api";
+import { useParams, useNavigate } from "react-router-dom";
+import ResultEvent from "./components/ResultItem";
+import SaveResultEvent from "./components/SaveResultEvent";
+import DeleteResultItem from "./components/DeleteResultItem";
 
 function DashboardContainer() {
-    const dashboardRef = React.useRef({});
-    const [dashboards, setDashboards] = React.useState([]);
+    let { id } = useParams();
+    const navigate = useNavigate();
+    const resultEventRef = React.useRef({});
+    const [event, setEvent] = React.useState({});
+    const [resultEvents, setResultEvents] = React.useState([]);
     const [show, setShow] = useState({
         isDelete: false,
     });
-    dashboardRef.current.onSetDashboards = setDashboards;
+    const themeLogged = React.useContext(LoggedContext);
+    resultEventRef.current.onSetDashboards = setResultEvents;
     function handleSetSort(key, value) {
         const reverse = { asc: "desc", desc: "asc" };
         setFilters((filters) => {
@@ -44,17 +52,31 @@ function DashboardContainer() {
     };
 
     React.useEffect(() => {
-        document.title = "Quản lý sự kiện";
-        handleFetch();
+        document.title = "Quản lý trả kết quả";
+        handleFetch(setParam(filters));
+        handleInitGetEvent();
     }, []);
+
+    function handleInitGetEvent() {
+        useAxiosAuth.get(`admin/event/view?id=${id}`)
+            .then((response) => {
+                const result = response.data;
+                if (result.status) {
+                    setEvent(result.data.event);
+                }
+            })
+            .catch(e => {
+                alert(e);
+            })
+    }
 
     function handleFetch(search = "") {
         // boxLoadRef.current.setIshow(true);
-        useAxiosAuth.get(`admin/event${search}`)
+        useAxiosAuth.get(`admin/event-result${search}`)
             .then((value) => {
                 const result = value.data.data;
                 const { items, _meta } = result;
-                setDashboards(items);
+                setResultEvents(items);
                 // boxLoadRef.current.setIshow(false);
                 setFilters((filter) => {
                     return {
@@ -75,7 +97,8 @@ function DashboardContainer() {
         totalCount: 1,
         pageCount: 1,
         perPage: 10,
-        currentPage: 1
+        currentPage: 1,
+        event_id: id
     });
 
     function handleSetSort(key, value) {
@@ -108,16 +131,56 @@ function DashboardContainer() {
         e.preventDefault();
     }
 
+    function handleSortResult() {
+        useAxiosAuth.get(`admin/event-result/sort?event_id=${id}`)
+            .then((response) => {
+                const result = response.data;
+                if (result.status) {
+                    handleFetch(setParam(filters));
+                    themeLogged.handleShowSnackBar(result.message);
+                }
+                else {
+                    alert(result.message);
+                }
+            })
+            .catch(e => {
+                alert(e);
+            })
+    }
+
+    function handleViewPdf(){
+        window.open(`${baseURL}/admin/event-result/build-pdf?event_id=${id}`);
+    }
+
     return (
-        <DashboardContext.Provider value={dashboardRef.current}>
-            <DeleteDashboard onSetDashboards={setDashboards} />
-            <SaveEvent />
+        <ResultEventContext.Provider value={resultEventRef.current}>
+            <SaveResultEvent onSetResultEvents={setResultEvents} />
+            <DeleteResultItem onSetResultEvents={setResultEvents} />
             <div className={styles.dashboardPage}>
+                <Breadcrumbs aria-label="breadcrumb" sx={{ p: 2 }}>
+                    <Link
+                        onClick={(e) => {
+                            e.preventDefault();
+                            navigate("/dashboard")
+                        }}
+                        underline="hover" color="inherit" href="/">
+                        Quản lý sự kiện
+                    </Link>
+                    <Link
+                        underline="hover"
+                        color="inherit"
+                        href="/material-ui/getting-started/installation/"
+                    >
+                        Danh sách kết quả sự kiện
+                    </Link>
+                </Breadcrumbs>
                 <BoxFlex className={styles.dashboardTop} alignItems="center" justifyContent="space-between">
                     <div className={styles.boxLeft}>
-                        <h2 className={styles.title}>Danh sách sự kiện</h2>
+                        <h2 className={styles.title}>
+                            Danh sách trả kết quả sk: {event.name}
+                        </h2>
                     </div>
-                    <div className={styles.boxRight}>
+                    <form onSubmit={handleSubmit} className={styles.boxRight}>
                         <TextField
                             id="input-with-icon-textfield"
                             placeholder="Search list"
@@ -137,18 +200,27 @@ function DashboardContainer() {
                             }}
                         />
                         <span className={styles.iconFilter}>
-                            <Tooltip title="Filter list">
-                                <IconButton>
-                                    <FilterList />
+                            <Tooltip title="Sắp xếp trả kết quả">
+                                <IconButton
+                                    onClick={handleSortResult}
+                                >
+                                    <Sync />
                                 </IconButton>
                             </Tooltip>
+                            <Tooltip title="In Báo Cáo">
+                            <IconButton
+                                onClick={handleViewPdf}
+                            >
+                                <LocalPrintshop />
+                            </IconButton>
+                        </Tooltip>
                         </span>
                         <Button color="secondary"
-                            onClick={() => dashboardRef.current.handleAdd()}
+                            onClick={() => resultEventRef.current.handleAdd()}
                             className={styles.ml} variant="contained" size="small">
                             Thêm Mới
                         </Button>
-                    </div>
+                    </form>
                 </BoxFlex>
                 <TableContainer>
                     <Table
@@ -158,24 +230,13 @@ function DashboardContainer() {
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                        color="primary"
-                                        inputProps={{
-                                            'aria-label': 'select all desserts',
-                                        }}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    #
-                                </TableCell>
                                 <TableCell>
                                     <TableSortLabel
                                         active={filters.sortField.name}
                                         direction={filters.sortField.name}
                                         onClick={() => handleSetSort("name", filters.sortField.name)}
                                     >
-                                        Tên Sự Kiện
+                                        Tên Khách Hàng
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
@@ -184,7 +245,7 @@ function DashboardContainer() {
                                         direction={filters.sortField.code}
                                         onClick={() => handleSetSort("code", filters.sortField.code)}
                                     >
-                                        Mã Sự Kiện
+                                        SĐT Khách Hàng
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
@@ -198,11 +259,29 @@ function DashboardContainer() {
                                 </TableCell>
                                 <TableCell>
                                     <TableSortLabel
-                                        active={filters.sortField.start_at}
-                                        direction={filters.sortField.start_at}
-                                        onClick={() => handleSetSort("start_at", filters.sortField.start_at)}
+                                        active={filters.sortField.turnover}
+                                        direction={filters.sortField.turnover}
+                                        onClick={() => handleSetSort("turnover", filters.sortField.turnover)}
                                     >
-                                        Ngày Diễn Ra
+                                        Doanh Thu
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={filters.sortField.customer_id}
+                                        direction={filters.sortField.customer_id}
+                                        onClick={() => handleSetSort("customer_id", filters.sortField.customer_id)}
+                                    >
+                                        Đối Tác
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={filters.sortField.seller_id}
+                                        direction={filters.sortField.seller_id}
+                                        onClick={() => handleSetSort("seller_id", filters.sortField.seller_id)}
+                                    >
+                                        Người Trả Kết Quả
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
@@ -211,11 +290,9 @@ function DashboardContainer() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {dashboards.map((dashboard, index) => {
-                                if (dashboard) {
-                                    return (
-                                        <DashboardItem event={dashboard} key={index} keys={index} />
-                                    )
+                            {resultEvents.map((resultEvent, key) => {
+                                if (resultEvent) {
+                                    return (<ResultEvent resultEvent={resultEvent} keys={key} key={key} />)
                                 }
                             })}
                         </TableBody>
@@ -230,7 +307,7 @@ function DashboardContainer() {
                     title="dev"
                 /> */}
             </div >
-        </DashboardContext.Provider>)
+        </ResultEventContext.Provider>)
 }
 
 export default DashboardContainer;

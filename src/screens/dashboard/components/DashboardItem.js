@@ -4,14 +4,17 @@ import {
     IconButton,
     TableRow,
     TableCell,
-    Checkbox
+    Checkbox,
+    Box
 } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, Article, Block } from '@mui/icons-material';
 import { DashboardContext } from "../../../context/DashboardContext";
+import { useNavigate } from "react-router-dom";
 
 
 function DashboardItem({ event, keys }) {
     const themeDashboardContext = React.useContext(DashboardContext);
+    const navigate = useNavigate();
     return (
         <TableRow
             hover
@@ -39,6 +42,22 @@ function DashboardItem({ event, keys }) {
                 {event.start_at}
             </TableCell>
             <TableCell>
+                {
+                    event.is_check_result
+                        ? (
+                            <Tooltip title="Xem trả kết quả"
+                                onClick={() => navigate(`/dashboard/${event.id}`)}>
+                                <IconButton>
+                                    <Article />
+                                </IconButton>
+                            </Tooltip>
+                        )
+                        : (<Tooltip title="Chưa đến thời gian xem kết quả">
+                            <IconButton>
+                                <Block />
+                            </IconButton>
+                        </Tooltip>)
+                }
                 <Tooltip title="Edit" onClick={() => themeDashboardContext.handleUpdate(event.id, keys)}>
                     <IconButton>
                         <Edit />

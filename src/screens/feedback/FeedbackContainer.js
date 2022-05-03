@@ -224,14 +224,14 @@ function FeedbackContainer() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TablePagination
+                {/* <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     page={filters.currentPage}
                     count={filters.totalCount}
                     rowsPerPage={filters.perPage}
                     title="dev"
-                />
+                /> */}
             </div >
         </FeedbackContext.Provider>)
 }

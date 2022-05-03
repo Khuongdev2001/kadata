@@ -201,7 +201,7 @@ function AdminContainer() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
+            {/* <TablePagination
                 onPageChange={((e, newPage) => {
                     console.log(newPage);
                 })}
@@ -211,7 +211,7 @@ function AdminContainer() {
                 count={filters.totalCount}
                 rowsPerPage={filters.perPage}
                 title="dev"
-            />
+            /> */}
         </div >
     </AdminContext.Provider>)
 }
