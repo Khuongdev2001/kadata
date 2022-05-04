@@ -39,17 +39,11 @@ function SaveEvent() {
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <TabList value={tab} onChange={handleChangeTab} aria-label="basic tabs example">
                             <Tab label="Sắp Xếp Tư Vấn" value={1} />
-                            {!eventRef.current.isAdd && <Tab label="Sắp Xếp Trả Kết Quả" value={2} />}
                         </TabList>
                     </Box>
                     <TabPanel value={1} index={0}>
                         <Advise onIsShow={setIshow} eventRef={eventRef} />
                     </TabPanel>
-                    {!eventRef.current.isAdd && (
-                        <TabPanel value={2} index={1}>
-                            <ResultEvent />
-                        </TabPanel>
-                    )}
                 </Box>
             </TabContext>
         </div>

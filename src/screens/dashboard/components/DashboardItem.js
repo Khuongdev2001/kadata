@@ -58,12 +58,12 @@ function DashboardItem({ event, keys }) {
                             </IconButton>
                         </Tooltip>)
                 }
-                <Tooltip title="Edit" onClick={() => themeDashboardContext.handleUpdate(event.id, keys)}>
+                <Tooltip title="Chỉnh Sửa" onClick={() => themeDashboardContext.handleUpdate(event.id, keys)}>
                     <IconButton>
                         <Edit />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Delete">
+                <Tooltip title="Xóa">
                     <IconButton onClick={() => themeDashboardContext.handleDelete(event.id, keys)}>
                         <Delete />
                     </IconButton>

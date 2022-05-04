@@ -205,9 +205,6 @@ function Advise({ eventRef, onIsShow }) {
                                 Báo Cáo
                             </p>
                         </Button>
-                        <Button type="danger" radius="sm" size="sm" className={styles.btn}>
-                            <FontAwesome name="trash" /> <p className={styles.btnTitle}>Xóa</p>
-                        </Button>
                     </React.Fragment>
                 )}
             </div>
