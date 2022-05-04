@@ -217,7 +217,7 @@ function SaveResultEvent({ onSetResultEvents }) {
                 />
             </Grid>
             <Grid item xs={4}>
-                <TextField fullWidth size="small" id="outlined-basic" label="Người trả kết quản" disabled variant="outlined" />
+                <TextField fullWidth size="small" value={resultEvent.seller_name} id="outlined-basic" label="Người trả kết quản" disabled variant="outlined" />
             </Grid>
         </Grid>
     </Modal >)

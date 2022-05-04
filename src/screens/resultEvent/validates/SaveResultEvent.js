@@ -4,6 +4,7 @@ function SaveResultEventValidate(value, action = false) {
     return useValidator(value, [
         useValidator.isRequired("buyer_name", "Tên khách hàng không được bỏ trống"),
         useValidator.isRequired("buyer_phone", "Số điện thoại khách hàng không được bỏ trống"),
+        useValidator.isRequired("turnover", "Doanh Thu không được bỏ trống"),
         useValidator.isRequired("customer_id", "Khách hàng không được bỏ trống"),
         useValidator.isNumber("turnover", "Khách hàng không được bỏ trống"),
     ]);

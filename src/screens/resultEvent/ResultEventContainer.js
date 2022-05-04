@@ -136,6 +136,7 @@ function DashboardContainer() {
             .then((response) => {
                 const result = response.data;
                 if (result.status) {
+                    setEvent(result.data.event);
                     handleFetch(setParam(filters));
                     themeLogged.handleShowSnackBar(result.message);
                 }
@@ -148,14 +149,14 @@ function DashboardContainer() {
             })
     }
 
-    function handleViewPdf(){
+    function handleViewPdf() {
         window.open(`${baseURL}/admin/event-result/build-pdf?event_id=${id}`);
     }
 
     return (
         <ResultEventContext.Provider value={resultEventRef.current}>
             <SaveResultEvent onSetResultEvents={setResultEvents} />
-            <DeleteResultItem onSetResultEvents={setResultEvents} />
+            <DeleteResultItem  onSetResultEvents={setResultEvents} />
             <div className={styles.dashboardPage}>
                 <Breadcrumbs aria-label="breadcrumb" sx={{ p: 2 }}>
                     <Link
@@ -200,26 +201,41 @@ function DashboardContainer() {
                             }}
                         />
                         <span className={styles.iconFilter}>
-                            <Tooltip title="Sắp xếp trả kết quả">
-                                <IconButton
-                                    onClick={handleSortResult}
-                                >
-                                    <Sync />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="In Báo Cáo">
-                            <IconButton
-                                onClick={handleViewPdf}
-                            >
-                                <LocalPrintshop />
-                            </IconButton>
-                        </Tooltip>
+                            {
+                                !event.status ? (
+                                    <Tooltip title="Sắp xếp trả kết quả">
+                                        <IconButton
+                                            onClick={handleSortResult}
+                                        >
+                                            <Sync />
+                                        </IconButton>
+                                    </Tooltip>
+                                )
+                                : null
+                            }
+                            {
+                                event.status ? (
+                                    <Tooltip title="In Báo Cáo">
+                                        <IconButton
+                                            onClick={handleViewPdf}
+                                        >
+                                            <LocalPrintshop />
+                                        </IconButton>
+                                    </Tooltip>
+                                )
+                                : null
+                            }
                         </span>
-                        <Button color="secondary"
-                            onClick={() => resultEventRef.current.handleAdd()}
-                            className={styles.ml} variant="contained" size="small">
-                            Thêm Mới
-                        </Button>
+                        {
+                            !event.status ? (
+                                <Button color="secondary"
+                                    onClick={() => resultEventRef.current.handleAdd()}
+                                    className={styles.ml} variant="contained" size="small">
+                                    Thêm Mới
+                                </Button>
+                            )
+                            : null
+                        }
                     </form>
                 </BoxFlex>
                 <TableContainer>
