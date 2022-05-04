@@ -24,7 +24,7 @@ function SideBar() {
             <li className={styles.menuItem}>
                 <NavLink to="/staff" className={({ isActive }) => {
                     return styles.menuLink + " " + (isActive ? styles.active : "")
-                }}>Quản lý nhận sự</NavLink>
+                }}>Quản lý nhân sự</NavLink>
             </li>
             <li className={styles.menuItem}>
                 <NavLink to="/wage" className={({ isActive }) => {
