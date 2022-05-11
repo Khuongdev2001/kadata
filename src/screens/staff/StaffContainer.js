@@ -96,10 +96,10 @@ function StaffContainer() {
                 <div className={styles.boxLeft}>
                     <h2 className={styles.title}>Danh sách nhân sự</h2>
                 </div>
-                <div className={styles.boxRight}>
+                <form className={styles.boxRight} onSubmit={handleSubmit}>
                     <TextField
                         id="input-with-icon-textfield"
-                        placeholder="Search list"
+                        placeholder="Tìm kiếm nhân viên"
                         size="small"
                         variant="standard"
                         onChange={(e) => setFilters(prev => ({
@@ -119,19 +119,19 @@ function StaffContainer() {
                             </IconButton>
                         </Tooltip>
                     </a>
-                    <span className={styles.iconFilter}>
+                    {/* <span className={styles.iconFilter}>
                         <Tooltip title="Filter list">
                             <IconButton>
                                 <FilterList />
                             </IconButton>
                         </Tooltip>
-                    </span>
+                    </span> */}
                     <Button
                         onClick={() => staffRef.current.handleAdd()}
                         color="secondary" className={styles.ml} variant="contained" size="small">
                         Thêm Mới
                     </Button>
-                </div>
+                </form>
             </BoxFlex>
             <TableContainer>
                 <Table
@@ -141,14 +141,6 @@ function StaffContainer() {
                 >
                     <TableHead>
                         <TableRow>
-                            <TableCell padding="checkbox">
-                                <Checkbox
-                                    color="primary"
-                                    inputProps={{
-                                        'aria-label': 'select all desserts',
-                                    }}
-                                />
-                            </TableCell>
                             <TableCell>
                                 #
                             </TableCell>
@@ -201,7 +193,7 @@ function StaffContainer() {
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
-                                Actions
+                                Hành Động
                             </TableCell>
                         </TableRow>
                     </TableHead>

@@ -18,11 +18,6 @@ function StaffItem({ staff, keys }) {
             role="checkbox"
             tabIndex={-1}
         >
-            <TableCell padding="checkbox">
-                <Checkbox
-                    color="primary"
-                />
-            </TableCell>
             <TableCell>
                 {staff.id}
             </TableCell>
@@ -30,16 +25,24 @@ function StaffItem({ staff, keys }) {
                 {staff.staff_code}
             </TableCell>
             <TableCell>
-                {staff.staff_level_name}
+                <span>
+                    {staff.staff_level_name}
+                </span>
             </TableCell>
             <TableCell>
-                {staff.fullname}
+                <span>
+                    {staff.fullname}
+                </span>
             </TableCell>
             <TableCell>
-                {staff.phone}
+                <span>
+                    {staff.phone}
+                </span>
             </TableCell>
             <TableCell>
-                {staff.address}
+                <span>
+                    {staff.address}
+                </span>
             </TableCell>
             <TableCell>
                 <Tooltip title="Chỉnh sửa" onClick={() => saveStaff.handleUpdate(staff.id, keys)}>

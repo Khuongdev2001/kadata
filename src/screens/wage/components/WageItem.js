@@ -8,32 +8,35 @@ import {
 import { Edit, Delete } from '@mui/icons-material';
 import { WageContext } from "../../../context/WageContext";
 
-function WageItem() {
+function WageItem({ wage, keys }) {
     const themeWage = React.useContext(WageContext);
 
     return (<TableRow
+        style={wage.status ? { background: "#2ecc71" } : null}
         hover
         role="checkbox"
         tabIndex={-1}
     >
         <TableCell>
-            1
+            {wage.id}
         </TableCell>
         <TableCell>
-            OETC
+            {wage.staff.staff_code}
         </TableCell>
         <TableCell>
-            Tổng giám đốc
+            {wage.level}
         </TableCell>
-        <TableCell>Nguyễn Văn A</TableCell>
-        <TableCell>0856345642</TableCell>
-        <TableCell>10.000VNĐ</TableCell>
-        <TableCell>200.000VNĐ</TableCell>
-        <TableCell>200.000VNĐ</TableCell>
-        <TableCell><strong>200.000VNĐ</strong></TableCell>
         <TableCell>
-            <Tooltip title="Edit">
-                <IconButton onClick={() => themeWage.handleAdd()}>
+            {wage.staff.fullname}
+        </TableCell>
+        <TableCell>{wage.staff.phone}</TableCell>
+        <TableCell>{wage.basic_pay}</TableCell>
+        <TableCell>{wage.piece_pay}</TableCell>
+        <TableCell>{wage.allowance_pay}</TableCell>
+        <TableCell><strong>{wage.total_pay}</strong></TableCell>
+        <TableCell>
+            <Tooltip title="Chi Tiết">
+                <IconButton onClick={() => themeWage.handleAdd(wage.id, keys)}>
                     <Edit />
                 </IconButton>
             </Tooltip>

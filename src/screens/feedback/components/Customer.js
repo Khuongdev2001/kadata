@@ -41,7 +41,7 @@ function Customer({ onSetFeedback, feedback, errors }) {
             renderOption={(props, option) => <li {...props} key={option.id}>{option.name}</li>}
             id="combo-box-demo"
             options={customers}
-            renderInput={(params) => <TextField {...params} label="Đối tác" />}
+            renderInput={(params) => <TextField  {...params} size="small" label="Đối tác" />}
         />
     )
 }

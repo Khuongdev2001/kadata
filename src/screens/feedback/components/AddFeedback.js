@@ -11,7 +11,7 @@ import { LoggedContext } from "../../../context/LoggedContext";
 
 function AddFeedback({ onSetFeedbacks }) {
     const themeLogged = React.useContext(LoggedContext);
-    const [isShow, setIshow] = React.useState(false);
+    const [isShow, setIsShow] = React.useState(false);
     const [errors, setErrors] = React.useState({});
     const [feedback, setFeedback] = React.useState({
         report_title: "",
@@ -20,7 +20,7 @@ function AddFeedback({ onSetFeedbacks }) {
     })
     const themeFeedback = React.useContext(FeedbackContext);
     themeFeedback.handleAdd = function () {
-        setIshow(true);
+        setIsShow(true);
     }
     function handleChange(key, value) {
         setFeedback({
@@ -49,6 +49,7 @@ function AddFeedback({ onSetFeedbacks }) {
                 const result = response.data;
                 if (result.status) {
                     themeLogged.handleShowSnackBar(result.message);
+                    setIsShow(false);
                     onSetFeedbacks((feedbacks) => ([
                         ...feedbacks,
                         result.data.feedback
@@ -69,7 +70,7 @@ function AddFeedback({ onSetFeedbacks }) {
 
     return (<Modal
         onSubmit={handleSubmit}
-        className={styles.wpAddFeedback} isShow={isShow} onClose={() => setIshow(false)} size="xl">
+        className={styles.wpAddFeedback} isShow={isShow} onClose={() => setIsShow(false)} size="xl">
         <h3 className={styles.title}>Thêm phản hồi</h3>
         <div className={styles.formGroup}>
             <Customer errors={errors} feedback={feedback} onSetFeedback={setFeedback} />

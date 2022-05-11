@@ -141,14 +141,6 @@ function FeedbackContainer() {
                     >
                         <TableHead>
                             <TableRow>
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                        color="primary"
-                                        inputProps={{
-                                            'aria-label': 'select all desserts',
-                                        }}
-                                    />
-                                </TableCell>
                                 <TableCell>
                                     #
                                 </TableCell>
@@ -161,7 +153,7 @@ function FeedbackContainer() {
                                         Tiêu đề
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell width={"20%"}>
                                     <TableSortLabel
                                         active={filters.sortField.report_content}
                                         direction={filters.sortField.report_content}
@@ -170,7 +162,7 @@ function FeedbackContainer() {
                                         Nội dung
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell width={"10%"}>
                                     <TableSortLabel
                                         active={filters.sortField.customer}
                                         direction={filters.sortField.customer}
@@ -207,7 +199,7 @@ function FeedbackContainer() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
-                                    Actions
+                                    Hành Động
                                 </TableCell>
                             </TableRow>
                         </TableHead>

@@ -38,7 +38,7 @@ function DeleteFeedback({ onSetFeedbacks }) {
     }
     const [isShow, setIshow] = React.useState(false);
     return (
-        <Modal onSubmit={handleSubmit} isShow={isShow} onClose={() => setIshow(false)} size="sm" position="center">
+        <Modal onSubmit={handleSubmit} btnTextConfirm="Xóa"  isShow={isShow} onClose={() => setIshow(false)} size="sm" position="center">
             Xóa phản hồi này
         </Modal>
     )

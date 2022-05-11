@@ -12,3 +12,12 @@
     margin-bottom: 0;
     margin-left: 14px;
 }
+
+td {
+    span {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}

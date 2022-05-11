@@ -12,23 +12,23 @@ import { FeedbackContext } from "../../../context/FeedbackContext";
 function FeedbackItem({ feedback, keys }) {
     const themeFeedback = React.useContext(FeedbackContext);
     return (<TableRow
+        onClick={() => themeFeedback.handleView(feedback.id, keys)}
         hover
         role="checkbox"
         tabIndex={-1}
     >
-        <TableCell padding="checkbox">
-            <Checkbox
-                color="primary"
-            />
-        </TableCell>
         <TableCell>
             {feedback.id}
         </TableCell>
         <TableCell>
-            {feedback.report_title}
+            <span>
+                {feedback.report_title}
+            </span>
         </TableCell>
         <TableCell>
-            {feedback.report_content}
+            <span>
+                {feedback.report_content_raw}
+            </span>
         </TableCell>
         <TableCell>
             {feedback.customer.name}

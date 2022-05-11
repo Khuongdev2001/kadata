@@ -38,7 +38,9 @@ function StaffLevel({ onSetStaff, staff, errors }) {
                 // Regular option
                 return option.name;
             }}
-            value={staff.staff_level_name}
+            value={staffLevels.find(function (item) {
+                return item.id == staff.staff_level;
+            }) ?? ""}
             onChange={(e, value) => handleChange("staff_level", "staff_level_name", value)}
             renderOption={(props, option) => <li {...props} key={option.id}>{option.name}</li>}
             id="combo-box-demo"

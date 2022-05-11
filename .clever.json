@@ -1,11 +1,9 @@
 {
-  "apps": [
-    {
-      "app_id": "app_a00f12b9-5a6a-4bbb-b4ba-832c3d5dab42",
-      "org_id": "orga_86553933-4b16-4311-8839-5f6fd6bfcdfc",
-      "deploy_url": "https://push-n2-par-clevercloud-customers.services.clever-cloud.com/app_a00f12b9-5a6a-4bbb-b4ba-832c3d5dab42.git",
-      "name": "Kadata_Frontend",
-      "alias": "Kadata_Frontend"
-    }
-  ]
+    "apps": [{
+        "app_id": "app_a00f12b9-5a6a-4bbb-b4ba-832c3d5dab42",
+        "org_id": "orga_86553933-4b16-4311-8839-5f6fd6bfcdfc",
+        "deploy_url": "https://push-n2-par-clevercloud-customers.services.clever-cloud.com/app_a00f12b9-5a6a-4bbb-b4ba-832c3d5dab42.git",
+        "name": "Kadata_Frontend",
+        "alias": "Kadata_Frontend"
+    }]
 }
