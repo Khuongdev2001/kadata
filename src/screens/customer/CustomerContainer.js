@@ -120,13 +120,6 @@ function CustomerContainer() {
                             </IconButton>
                         </Tooltip>
                     </a>
-                    <span className={styles.iconFilter}>
-                        <Tooltip title="Filter list">
-                            <IconButton>
-                                <FilterList />
-                            </IconButton>
-                        </Tooltip>
-                    </span>
                     <Button
                         onClick={() => customerRef.current.handleAdd()}
                         color="secondary" className={styles.ml} variant="contained" size="small">
@@ -202,16 +195,7 @@ function CustomerContainer() {
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell>
-                                <TableSortLabel
-                                    active={filters.sortField.created_at}
-                                    direction={filters.sortField.created_at}
-                                    onClick={() => handleSetSort("created_at", filters.sortField.created_at)}
-                                >
-                                    Ngày tạo
-                                </TableSortLabel>
-                            </TableCell>
-                            <TableCell>
-                                Actions
+                                Hành Động
                             </TableCell>
                         </TableRow>
                     </TableHead>

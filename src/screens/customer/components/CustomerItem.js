@@ -38,9 +38,6 @@ function CustomerItem({ customer, keys }) {
             {customer.phone}
         </TableCell>
         <TableCell>
-            {customer.created_at}
-        </TableCell>
-        <TableCell>
             {customer.address}
         </TableCell>
         <TableCell>
